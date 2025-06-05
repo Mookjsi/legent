@@ -57,21 +57,32 @@ class InformationParser:
         data = json.loads(json.dumps(self.schema))
 
         def _extract(section: str, key: str) -> Optional[str]:
-            pattern = rf"{key}\s*[:：]\s*(.+)"
-            section_pattern = rf"{section}.*?(?:\n\n|\Z)"
-            match_section = re.search(section_pattern, text, re.DOTALL)
+            """Extract a value from a section handling newline variations."""
+            normalized = text.replace("\r\n", "\n")
+
+            section_pattern = rf"{re.escape(section)}\s*[:：]?.*?(?=\n\s*\n|\Z)"
+            match_section = re.search(section_pattern, normalized, re.DOTALL)
             if not match_section:
                 return None
+
+            pattern = rf"{re.escape(key)}\s*[:：]\s*(.+)"
             match_item = re.search(pattern, match_section.group(0))
             if match_item:
-                return match_item.group(1).strip()
+                return match_item.group(1).splitlines()[0].strip()
             return None
 
         for sec in ["사고 발생 환경", "차량 A 정보", "차량 B 정보", "사고 상황 기술", "추가 관찰 사항"]:
-            for key in data[self._map_key(sec)]:
+            container = data[self._map_key(sec)]
+            if not isinstance(container, dict):
+                val = _extract(sec, sec)
+                if val is not None:
+                    data[self._map_key(sec)] = val
+                continue
+
+            for key in container:
                 val = _extract(sec, self._human_readable(key))
                 if val is not None:
-                    data[self._map_key(sec)][key] = val
+                    container[key] = val
 
         return data
 
