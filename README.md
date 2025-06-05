@@ -13,6 +13,14 @@ data and then classified against predefined PDF rules.
 - `legent/classifier.py` – rule-based accident classifier (placeholder).
 - `legent/pipeline.py` – orchestrates the end-to-end pipeline.
 
+## Installation
+
+Install the dependencies listed in `requirements.txt`:
+
+```bash
+pip install -r requirements.txt
+```
+
 ## Usage
 
 ```
