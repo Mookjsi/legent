@@ -1,7 +1,9 @@
 from dataclasses import dataclass
 from typing import List, Optional
 
+import logging
 import openai
+from openai import OpenAIError
 
 
 @dataclass
@@ -34,6 +36,6 @@ class LVLMExtractor:
                 max_tokens=max_tokens,
             )
             return response.choices[0].message.content
-        except Exception as exc:  # pylint: disable=broad-except
-            print(f"LVLM query failed: {exc}")
+        except OpenAIError as exc:
+            logging.error("LVLM query failed due to API error: %s", exc)
             return None
