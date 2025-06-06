@@ -8,10 +8,12 @@ from openai import OpenAIError
 
 @dataclass
 class LVLMExtractor:
-    """Query OpenAI GPT-4-Vision model with images and a prompt."""
+    """Query OpenAI GPT-4 Vision model with images and a prompt."""
 
     api_key: str
-    model_name: str = "gpt-4-vision-preview"
+    # OpenAI deprecated ``gpt-4-vision-preview`` so we use the stable vision
+    # capable model instead.
+    model_name: str = "gpt-4-1106-vision"
 
     def __post_init__(self) -> None:
         openai.api_key = self.api_key

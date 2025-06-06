@@ -8,7 +8,9 @@ data and then classified against predefined PDF rules.
 ## Structure
 
 - `legent/videoprocessor.py` – samples frames from a video.
-- `legent/lvlm_extractor.py` – queries the LVLM with frames and a prompt.
+ - `legent/lvlm_extractor.py` – queries the LVLM with frames and a prompt.
+   The extractor defaults to OpenAI's `gpt-4-1106-vision` model since
+   `gpt-4-vision-preview` has been deprecated.
 - `legent/info_parser.py` – converts LVLM textual output into a structured dict.
 - `legent/classifier.py` – rule-based accident classifier (placeholder).
 - `legent/pipeline.py` – orchestrates the end-to-end pipeline.
